@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Top 3 IP Ranking</title>
+
+<style>
+    body {
+        background: linear-gradient(135deg, #0b0f19, #111826);
+        color: #dce3f1;
+        font-family: "Segoe UI", Arial, sans-serif;
+        padding: 40px;
+        margin: 0;
+    }
+
+    h1 {
+        text-align: center;
+        color: #66d1ff;
+        font-size: 32px;
+        letter-spacing: 1px;
+        margin-bottom: 25px;
+        font-weight: 600;
+        text-shadow: 0 0 10px #0099ff;
+    }
+
+    pre {
+        background: rgba(255,255,255,0.05);
+        padding: 15px;
+        border-left: 3px solid #0099ff;
+        border-radius: 8px;
+        font-size: 13px;
+        color: #b0bdd1;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    textarea {
+        width: 100%;
+        height: 180px;
+        background: rgba(255,255,255,0.06);
+        border: 1px solid rgba(255,255,255,0.15);
+        border-radius: 12px;
+        color: #eaf4ff;
+        padding: 14px;
+        font-size: 15px;
+        backdrop-filter: blur(10px);
+        box-shadow: inset 0 0 10px rgba(0,0,0,0.2);
+        resize: none;
+    }
+
+    textarea::placeholder {
+        color: #8fa2c0;
+    }
+
+    button {
+        background: linear-gradient(135deg, #0099ff, #00c3ff);
+        border: none;
+        padding: 14px 28px;
+        margin-top: 18px;
+        color: white;
+        border-radius: 12px;
+        font-size: 16px;
+        cursor: pointer;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+        transition: 0.25s ease;
+        width: 100%;
+        box-shadow: 0 6px 18px rgba(0,153,255,0.35);
+    }
+
+    button:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(0,153,255,0.55);
+    }
+
+    .card {
+        background: rgba(255,255,255,0.05);
+        margin-top: 35px;
+        padding: 25px;
+        border-radius: 14px;
+        border: 1px solid rgba(255,255,255,0.15);
+        backdrop-filter: blur(12px);
+        box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+    }
+
+    .card h2 {
+        color: #88d9ff;
+        margin-bottom: 20px;
+        text-shadow: 0 0 7px #0099ff;
+        font-size: 24px;
+        font-weight: 600;
+    }
+
+    .rank {
+        font-size: 18px;
+        margin-bottom: 15px;
+        padding: 16px;
+        border-radius: 12px;
+        border: 1px solid rgba(255,255,255,0.15);
+        backdrop-filter: blur(10px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    .rank1 { background: rgba(0,123,255,0.22); border-left: 4px solid #4db8ff; }
+    .rank2 { background: rgba(0,98,190,0.18); border-left: 4px solid #3aa0e6; }
+    .rank3 { background: rgba(0,77,160,0.18); border-left: 4px solid #2f8dcf; }
+
+    .ip-text {
+        font-weight: bold;
+        color: #66d9ff;
+        text-shadow: 0 0 7px #0099ff;
+        font-size: 18px;
+    }
+</style>
+</head>
+
+<body>
+
+<h1>CEK IP HACKER</h1>
+
+<p>Paste data CSV seperti contoh:</p>
+<pre>
+user,tanggal,ip,url
+hujan567,2025-11-19 16:35:29,128.1.227.227,https://tvtoto.net
+...</pre>
+
+<textarea id="inputData" placeholder="Tempel data CSV di sini..."></textarea>
+<button onclick="processIP()">Proses</button>
+
+<div id="output"></div>
+
+<script>
+function processIP() {
+    let raw = document.getElementById("inputData").value.trim();
+    if (!raw) return alert("Tempel data dulu ya.");
+
+    let rows = raw.split("\n");
+    let ipCount = {};
+
+    rows.forEach(line => {
+        let parts = line.split(",");
+        if (parts.length >= 3) {
+            let ip = parts[2].trim();
+            ipCount[ip] = (ipCount[ip] || 0) + 1;
+        }
+    });
+
+    let sorted = Object.entries(ipCount)
+        .sort((a, b) => b[1] - a[1])
+        .slice(0, 3);
+
+    let html = `<div class='card'><h2>Top IP Ranking</h2>`;
+
+    sorted.forEach((item, index) => {
+        let rankClass = `rank rank${index+1}`;
+        html += `
+            <div class="${rankClass}">
+                <b>Peringkat ${index+1}</b><br>
+                IP: <span class="ip-text">${item[0]}</span><br>
+                Jumlah Login: ${item[1]}
+            </div>`;
+    });
+
+    html += "</div>";
+    document.getElementById("output").innerHTML = html;
+}
+</script>
+
+</body>
+</html>
